@@ -5,7 +5,7 @@ export default withAuth({
     authorized: ({ token }) => !!token, // Permite apenas se tiver token (JWT)
   },
   pages: {
-    signIn: "/login", // ✅ Aqui diz ao middleware que sua página de login é /
+    signIn: "/", // ✅ Aqui diz ao middleware que sua página de login é /
   },
 });
 
