@@ -1,25 +1,38 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 
 const Login = () => {
-  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const router = useRouter();
+
+  useEffect(() => {
+    // Redireciona para o dashboard se já estiver autenticado
+    const checkAuth = async () => {
+      const session = await fetch("/api/auth/session").then((res) =>
+        res.json()
+      );
+      if (session?.user) {
+        router.push("/portas");
+      }
+    };
+    checkAuth();
+  }, [router]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     const res = await signIn("credentials", {
       redirect: false, // não redirecionar automaticamente
-      username,
+      email,
       password,
     });
 
     if (res?.ok) {
-      router.push("/mesas"); // redireciona para o dashboard
+      router.push("/portas"); // redireciona para o dashboard
     } else {
       setError("Usuário ou senha inválidos!");
     }
@@ -35,9 +48,9 @@ const Login = () => {
         {error && <p className="text-red-500 text-center mb-4">{error}</p>}
         <input
           type="text"
-          placeholder="Usuário"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
+          placeholder="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
           className="w-full p-3 border rounded mb-4"
           required
         />

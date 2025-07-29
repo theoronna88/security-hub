@@ -2,39 +2,64 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import { JWT } from "next-auth/jwt";
 import { Session } from "next-auth";
 import { User as NextAuthUser } from "next-auth";
+import bcrypt from "bcryptjs";
+import { db } from "@/lib/prisma";
 
 declare module "next-auth" {
   interface Session {
     accessToken?: string;
+    user: {
+      id: string;
+      name?: string | null;
+      email?: string | null;
+      role?: string;
+    };
   }
 }
 
 interface User extends NextAuthUser {
   token?: string;
+  role?: string;
 }
-
-const urlBase = process.env.NEXT_PUBLIC_API_URL;
 
 export const authOptions = {
   providers: [
     CredentialsProvider({
       name: "Credentials",
       credentials: {
-        username: { label: "Username", type: "text", placeholder: "jsmith" },
+        email: {
+          label: "Email",
+          type: "text",
+          placeholder: "jsmith@example.com",
+        },
         password: { label: "Password", type: "password" },
       },
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      async authorize(credentials, req) {
-        const res = await fetch(urlBase + "/login", {
-          method: "POST",
-          body: JSON.stringify(credentials),
-          headers: { "Content-Type": "application/json" },
+      authorize: async (credentials) => {
+        console.log("Credentials:", credentials);
+        if (!credentials || !credentials.email || !credentials.password) {
+          return null;
+        }
+
+        const user = await db.user.findUnique({
+          where: { email: credentials.email },
         });
+        console.log("User found:", user);
 
-        if (!res.ok) return null;
+        if (!user || !user.password) return null;
 
-        const token = await res.text();
-        return { id: credentials?.username || "", token };
+        // First, try plain text comparison
+        if (credentials.password === user.password) {
+          return { id: user.id, email: user.email };
+        }
+
+        // If plain text fails, try bcrypt comparison
+        const isValid = await bcrypt.compare(
+          credentials.password,
+          user.password
+        );
+        if (!isValid) return null;
+
+        return { id: user.id, email: user.email };
       },
     }),
   ],
