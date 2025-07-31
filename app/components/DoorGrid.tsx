@@ -168,6 +168,7 @@ export function DoorGrid() {
 
         <div className="flex gap-2">
           <Button
+            className="rounded-4xl"
             variant="outline"
             onClick={handleRefresh}
             disabled={refreshing}
@@ -206,7 +207,7 @@ export function DoorGrid() {
                 placeholder="Buscar por nome..."
                 value={nameFilter}
                 onChange={(e) => setNameFilter(e.target.value)}
-                className="pl-10"
+                className="pl-10 rounded-2xl border-gray-300 focus:border-primary focus:ring-primary"
               />
             </div>
           </div>
@@ -222,7 +223,7 @@ export function DoorGrid() {
               <Button
                 variant="outline"
                 onClick={() => setIsUFPopoverOpen(!isUFPopoverOpen)}
-                className="w-full justify-between h-auto min-h-10"
+                className="w-full justify-between h-auto min-h-10 rounded-2xl hover:bg-gray-100 focus:bg-gray-100"
               >
                 <div className="flex flex-wrap gap-1">
                   {selectedUFs.length === 0 ? (
@@ -269,12 +270,13 @@ export function DoorGrid() {
 
               {/* Dropdown manual */}
               {isUFPopoverOpen && (
-                <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-200 rounded-md shadow-lg z-50 max-h-60 overflow-y-auto">
+                <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-200 shadow-lg z-50 max-h-60 overflow-y-auto rounded-[8px]">
                   <div className="p-3 border-b bg-gray-50">
                     <div className="flex justify-between gap-2">
                       <Button
                         variant="outline"
                         size="sm"
+                        className="hover:bg-gray-100 rounded-4xl"
                         onClick={selectAllUFs}
                         disabled={selectedUFs.length === availableUFs.length}
                       >
@@ -283,6 +285,7 @@ export function DoorGrid() {
                       <Button
                         variant="outline"
                         size="sm"
+                        className="hover:bg-gray-100 rounded-4xl"
                         onClick={clearAllUFs}
                         disabled={selectedUFs.length === 0}
                       >
@@ -331,7 +334,7 @@ export function DoorGrid() {
               variant="outline"
               onClick={clearFilters}
               disabled={nameFilter === "" && selectedUFs.length === 0}
-              className="w-full"
+              className="w-full rounded-4xl hover:bg-gray-100"
             >
               Limpar Filtros
             </Button>

@@ -80,7 +80,7 @@ function ActionsDropdown({ user }: { user: User }) {
     <div className="relative">
       <Button
         variant="ghost"
-        className="h-8 w-8 p-0"
+        className="h-8 w-8 p-0 hover:bg-gray-200 rounded-4xl"
         onClick={handleButtonClick}
       >
         <span className="sr-only">Abrir menu</span>
@@ -90,11 +90,11 @@ function ActionsDropdown({ user }: { user: User }) {
       {isOpen && buttonRect && (
         <>
           <div
-            className="fixed inset-0 z-[998]"
+            className="fixed inset-0 z-[998] "
             onClick={() => setIsOpen(false)}
           />
           <div
-            className="fixed z-[999] min-w-[120px] bg-white border shadow-lg rounded-md p-1"
+            className="fixed z-[999] min-w-[120px] bg-white border shadow-lg rounded-2xl p-1"
             style={{
               top: `${buttonRect.bottom + 4}px`,
               left: `${buttonRect.right - 120}px`, // Alinha à direita do botão
@@ -153,7 +153,7 @@ export const columns: ColumnDef<User>[] = [
   {
     accessorKey: "name",
     header: () => (
-      <div className="flex justify-start items-center w-full">Name</div>
+      <div className="flex justify-start items-center w-full">Nome</div>
     ),
     cell: ({ getValue }) => (
       <div className="flex justify-start  items-center w-full">
@@ -175,7 +175,7 @@ export const columns: ColumnDef<User>[] = [
   {
     accessorKey: "role",
     header: () => (
-      <div className="flex justify-center items-center w-full">Role</div>
+      <div className="flex justify-center items-center w-full">Função</div>
     ),
     cell: ({ getValue }) => (
       <div className="flex justify-center items-center w-full">

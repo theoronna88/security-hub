@@ -159,12 +159,16 @@ const DialogAddDoor = ({ buttonTitle, door }: DialogAddDoorProps) => {
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogTrigger asChild>
           {buttonTitle?.includes("Adicionar") ? (
-            <Button>
-              <Plus className="h-4 w-4 mr-2" />
+            <Button className="rounded-4xl">
+              <Plus className="h-4 w-4 mr-2 " />
               {buttonTitle}
             </Button>
           ) : (
-            <Button variant="outline" size="icon">
+            <Button
+              variant="outline"
+              className="rounded-4xl hover:bg-gray-100"
+              size="icon"
+            >
               <PencilIcon width={20} height={20} />
             </Button>
           )}
@@ -181,7 +185,11 @@ const DialogAddDoor = ({ buttonTitle, door }: DialogAddDoorProps) => {
                   <FormItem>
                     <FormLabel>Nome</FormLabel>
                     <FormControl>
-                      <Input {...field} placeholder="Nome da porta" />
+                      <Input
+                        {...field}
+                        placeholder="Nome da porta"
+                        className="rounded-2xl border-gray-300 focus:border-primary focus:ring-primary"
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -196,6 +204,7 @@ const DialogAddDoor = ({ buttonTitle, door }: DialogAddDoorProps) => {
                     <FormControl>
                       <Input
                         {...field}
+                        className="rounded-2xl border-gray-300 focus:border-primary focus:ring-primary"
                         placeholder="IP do dispositivo com a porta Ex.: 192.168.0.1:8801"
                         inputMode="decimal"
                         pattern="[0-9.:]*"
@@ -217,7 +226,11 @@ const DialogAddDoor = ({ buttonTitle, door }: DialogAddDoorProps) => {
                   <FormItem>
                     <FormLabel>Usuário</FormLabel>
                     <FormControl>
-                      <Input {...field} placeholder="Usuário do dispositivo" />
+                      <Input
+                        {...field}
+                        placeholder="Usuário do dispositivo"
+                        className="rounded-2xl border-gray-300 focus:border-primary focus:ring-primary"
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -234,6 +247,7 @@ const DialogAddDoor = ({ buttonTitle, door }: DialogAddDoorProps) => {
                         {...field}
                         type="password"
                         placeholder="Senha do dispositivo"
+                        className="rounded-2xl border-gray-300 focus:border-primary focus:ring-primary"
                       />
                     </FormControl>
                     <FormMessage />
@@ -252,12 +266,16 @@ const DialogAddDoor = ({ buttonTitle, door }: DialogAddDoorProps) => {
                       value={field.value}
                       defaultValue={field.value}
                     >
-                      <SelectTrigger className="w-full">
+                      <SelectTrigger className="w-full rounded-2xl border-gray-300 focus:border-gray-200 focus:ring-gray-200">
                         <SelectValue placeholder="Selecione o Modelo do Controle de Acesso" />
                       </SelectTrigger>
-                      <SelectContent className="w-full">
+                      <SelectContent className="w-full bg-white rounded-2xl border-gray-300 focus:border-primary focus:ring-primary ">
                         {deviceModels.map((model) => (
-                          <SelectItem key={model} value={model}>
+                          <SelectItem
+                            key={model}
+                            value={model}
+                            className="data-[highlighted]:bg-gray-100 focus:bg-gray-100"
+                          >
                             {model}
                           </SelectItem>
                         ))}
@@ -279,12 +297,16 @@ const DialogAddDoor = ({ buttonTitle, door }: DialogAddDoorProps) => {
                       value={field.value}
                       defaultValue={field.value}
                     >
-                      <SelectTrigger className="w-full">
+                      <SelectTrigger className="w-full bg-white rounded-2xl border-gray-300 focus:border-gray-200 focus:ring-gray-200">
                         <SelectValue placeholder="Selecione o estado (UF)" />
                       </SelectTrigger>
-                      <SelectContent className="w-full">
+                      <SelectContent className="w-full bg-white rounded-2xl border-gray-300 focus:border-primary focus:ring-primary ">
                         {UF.map((uf) => (
-                          <SelectItem key={uf} value={uf}>
+                          <SelectItem
+                            key={uf}
+                            value={uf}
+                            className="data-[highlighted]:bg-gray-100 focus:bg-gray-100"
+                          >
                             {uf}
                           </SelectItem>
                         ))}
@@ -294,7 +316,7 @@ const DialogAddDoor = ({ buttonTitle, door }: DialogAddDoorProps) => {
                   </FormItem>
                 )}
               />
-              <Button type="submit">
+              <Button type="submit" className="w-full rounded-4xl">
                 {door ? "Salvar Alterações" : "Adicionar Porta"}
               </Button>
             </form>

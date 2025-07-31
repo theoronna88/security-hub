@@ -177,6 +177,7 @@ export function DoorCard({ door, onDoorOpen }: DoorCardProps) {
     }
   };
 
+  /*
   const handleEventsView = async () => {
     if (door.status === "offline") {
       toast.error("Não é possível ver os eventos. Dispositivo offline.");
@@ -224,7 +225,7 @@ export function DoorCard({ door, onDoorOpen }: DoorCardProps) {
     } finally {
       setIsLoadingEvents(false);
     }
-  };
+  }; */
 
   // Função auxiliar para formatar o timestamp Unix
   const formatUnixTimestamp = (timestamp: number): string => {
@@ -234,7 +235,7 @@ export function DoorCard({ door, onDoorOpen }: DoorCardProps) {
 
   return (
     <Card
-      className={`transition-all duration-300 hover:shadow-lg hover:scale-105 ${getStatusColor()}`}
+      className={`rounded-2xl transition-all duration-300 hover:shadow-lg hover:scale-105 ${getStatusColor()}`}
     >
       <CardHeader className="pb-3">
         <div className="flex items-center justify-between">
@@ -293,7 +294,7 @@ export function DoorCard({ door, onDoorOpen }: DoorCardProps) {
         <Dialog>
           <DialogTrigger asChild>
             <Button
-              className="w-full"
+              className="w-full rounded-4xl"
               variant={door.status === "online" ? "default" : "secondary"}
               onClick={handleViewCamera}
               disabled={isLoadingCamera || door.status === "offline"}
@@ -331,7 +332,7 @@ export function DoorCard({ door, onDoorOpen }: DoorCardProps) {
         <Button
           onClick={handleOpenDoor}
           disabled={isOpening || door.status === "offline"}
-          className="w-full"
+          className="w-full rounded-4xl"
           variant={door.status === "online" ? "default" : "secondary"}
         >
           {isOpening ? (

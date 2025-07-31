@@ -90,11 +90,11 @@ const DialogAddUser = ({ title, user }: DialogAddUserProps) => {
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogTrigger asChild>
           <Button
-            variant={title === "Editar" ? "ghost" : "secondary"}
+            variant={title === "Editar" ? "ghost" : "default"}
             className={
               title === "Editar"
-                ? "text-black font-normal"
-                : "bg-blue-400 text-white"
+                ? "text-black font-normal hover:bg-gray-100 "
+                : " text-white hover:bg-gray-100 rounded-4xl"
             }
           >
             {title === "Editar" ? (
@@ -105,7 +105,7 @@ const DialogAddUser = ({ title, user }: DialogAddUserProps) => {
             {title} Usuário
           </Button>
         </DialogTrigger>
-        <DialogContent>
+        <DialogContent className="rounded-2xl">
           <DialogTitle>{title} Usuário</DialogTitle>
           {/* Form to add user will go here */}
           <Form {...form}>
@@ -117,7 +117,11 @@ const DialogAddUser = ({ title, user }: DialogAddUserProps) => {
                   <FormItem>
                     <FormLabel>Nome</FormLabel>
                     <FormControl>
-                      <Input {...field} placeholder="Nome do usuário" />
+                      <Input
+                        {...field}
+                        placeholder="Nome do usuário"
+                        className="rounded-2xl border-gray-300 focus:border-primary focus:ring-primary"
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -130,7 +134,11 @@ const DialogAddUser = ({ title, user }: DialogAddUserProps) => {
                   <FormItem>
                     <FormLabel>Email</FormLabel>
                     <FormControl>
-                      <Input {...field} placeholder="Email do usuário" />
+                      <Input
+                        {...field}
+                        placeholder="Email do usuário"
+                        className="rounded-2xl border-gray-300 focus:border-primary focus:ring-primary"
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -147,6 +155,7 @@ const DialogAddUser = ({ title, user }: DialogAddUserProps) => {
                         {...field}
                         type="password"
                         placeholder="Senha do usuário"
+                        className="rounded-2xl border-gray-300 focus:border-primary focus:ring-primary"
                       />
                     </FormControl>
                     <FormMessage />
@@ -165,13 +174,23 @@ const DialogAddUser = ({ title, user }: DialogAddUserProps) => {
                       defaultValue={field.value}
                     >
                       <FormControl>
-                        <SelectTrigger className="w-full">
+                        <SelectTrigger className="w-full rounded-2xl border-gray-300 focus:border-gray-200 focus:ring-gray-200">
                           <SelectValue placeholder="Selecione perfil" />
                         </SelectTrigger>
                       </FormControl>
-                      <SelectContent className="w-full">
-                        <SelectItem value="admin">Administrador</SelectItem>
-                        <SelectItem value="user">Usuário</SelectItem>
+                      <SelectContent className="w-full bg-white rounded-2xl border-gray-300 focus:border-primary focus:ring-primary ">
+                        <SelectItem
+                          value="admin"
+                          className="data-[highlighted]:bg-gray-100 focus:bg-gray-100"
+                        >
+                          Administrador
+                        </SelectItem>
+                        <SelectItem
+                          value="user"
+                          className="data-[highlighted]:bg-gray-100 focus:bg-gray-100"
+                        >
+                          Usuário
+                        </SelectItem>
                       </SelectContent>
                     </Select>
                     <FormMessage />
@@ -179,7 +198,10 @@ const DialogAddUser = ({ title, user }: DialogAddUserProps) => {
                 )}
               />
               {/* Additional fields can be added here */}
-              <Button type="submit" className="w-full bg-blue-500 text-white">
+              <Button
+                type="submit"
+                className="w-full bg-primary rounded-4xl text-white"
+              >
                 Salvar
               </Button>
             </form>
