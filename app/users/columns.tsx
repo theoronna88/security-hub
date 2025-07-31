@@ -6,16 +6,9 @@ import {
   UserCogIcon,
   UserPenIcon,
 } from "lucide-react";
+import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 
 export type User = {
   id: string;
@@ -75,6 +68,80 @@ function onActivateUser(userId: string) {
     .catch((error) => {
       console.error(error);
     });
+}
+
+function ActionsDropdown({ user }: { user: User }) {
+  const [isOpen, setIsOpen] = useState(false);
+  const [buttonRect, setButtonRect] = useState<DOMRect | null>(null);
+
+  const handleButtonClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    const rect = event.currentTarget.getBoundingClientRect();
+    setButtonRect(rect);
+    setIsOpen(!isOpen);
+  };
+
+  return (
+    <div className="relative">
+      <Button
+        variant="ghost"
+        className="h-8 w-8 p-0"
+        onClick={handleButtonClick}
+      >
+        <span className="sr-only">Abrir menu</span>
+        <MoreHorizontal className="h-4 w-4" />
+      </Button>
+
+      {isOpen && buttonRect && (
+        <>
+          <div
+            className="fixed inset-0 z-[998]"
+            onClick={() => setIsOpen(false)}
+          />
+          <div
+            className="fixed z-[999] min-w-[120px] bg-white border shadow-lg rounded-md p-1"
+            style={{
+              top: `${buttonRect.bottom + 4}px`,
+              left: `${buttonRect.right - 120}px`, // Alinha à direita do botão
+            }}
+          >
+            <div className="px-2 py-1.5 text-sm font-medium">Ações</div>
+
+            <button className="w-full text-left px-2 py-1.5 text-sm hover:bg-gray-100 rounded-sm flex items-center gap-2">
+              <UserPenIcon size={16} color="black" /> Editar
+            </button>
+
+            <div className="h-px bg-gray-200 my-1" />
+
+            {user.isActive ? (
+              <button
+                className="w-full text-left px-2 py-1.5 text-sm hover:bg-gray-100 rounded-sm flex items-center gap-2 text-blue-700"
+                onClick={() => {
+                  onDeactivateUser(user.id);
+                  setIsOpen(false);
+                }}
+              >
+                <UserCogIcon size={16} color="blue" /> Desativar
+              </button>
+            ) : (
+              <button
+                className="w-full text-left px-2 py-1.5 text-sm hover:bg-gray-100 rounded-sm flex items-center gap-2 text-green-700"
+                onClick={() => {
+                  onActivateUser(user.id);
+                  setIsOpen(false);
+                }}
+              >
+                <UserCogIcon size={16} color="green" /> Ativar
+              </button>
+            )}
+
+            <button className="w-full text-left px-2 py-1.5 text-sm hover:bg-gray-100 rounded-sm flex items-center gap-2 text-red-600">
+              <TrashIcon size={16} color="red" /> Excluir
+            </button>
+          </div>
+        </>
+      )}
+    </div>
+  );
 }
 
 export const columns: ColumnDef<User>[] = [
@@ -148,45 +215,7 @@ export const columns: ColumnDef<User>[] = [
     id: "actions",
     cell: ({ row }) => {
       const user = row.original;
-
-      return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-8 w-8 p-0">
-              <span className="sr-only">Abrir menu</span>
-              <MoreHorizontal className="h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Ações</DropdownMenuLabel>
-            <DropdownMenuItem>
-              <span className="0 w-full flex items-center gap-2">
-                <UserPenIcon color="black" /> Editar
-              </span>
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            {user.isActive ? (
-              <DropdownMenuItem onClick={() => onDeactivateUser(user.id)}>
-                <span className="text-blue-700 w-full flex items-center gap-2">
-                  <UserCogIcon color="blue" /> Desativar
-                </span>
-              </DropdownMenuItem>
-            ) : (
-              <DropdownMenuItem onClick={() => onActivateUser(user.id)}>
-                <span className="text-green-700 w-full flex items-center gap-2">
-                  <UserCogIcon color="green" /> Ativar
-                </span>
-              </DropdownMenuItem>
-            )}
-            <DropdownMenuItem>
-              <span className="text-destructive w-full flex items-center gap-2">
-                <TrashIcon color="red" />
-                Excluir
-              </span>
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      );
+      return <ActionsDropdown user={user} />;
     },
   },
 ];
