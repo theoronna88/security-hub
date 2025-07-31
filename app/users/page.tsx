@@ -16,7 +16,16 @@ const UserPage = () => {
       </div>
 
       {/* Toast notifications */}
-      <Toaster />
+      <Toaster
+        toastOptions={{
+          className: "bg-white text-gray-900 border border-gray-300 shadow-md",
+          style: {
+            backgroundColor: "#ffffff",
+            color: "#1f2937", // Tailwind gray-800
+            border: "1px solid #e5e7eb", // Tailwind gray-200
+          },
+        }}
+      />
     </main>
   );
 };
