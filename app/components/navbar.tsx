@@ -35,10 +35,10 @@ const NavBar = () => {
         <div className="flex items-center space-x-6">
           <div className="flex space-x-4">
             <a
-              href="/"
+              href="/portas"
               className="text-slate-700 hover:text-slate-900 hover:underline transition-colors"
             >
-              Home
+              Portas
             </a>
             <a
               href="/users"

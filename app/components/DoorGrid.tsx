@@ -36,14 +36,14 @@ export function DoorGrid() {
 
       if (result.success) {
         setDoors(result.doors);
-        console.log("Portas carregadas:", result.doors);
-        console.log(
+        // console.log("Portas carregadas:", result.doors);
+        /* console.log(
           "Locations nas portas:",
           result.doors.map((door: Door) => ({
             name: door.name,
             location: door.location,
           }))
-        );
+        ); */
       } else {
         toast.error("Erro ao carregar portas");
       }
@@ -62,8 +62,8 @@ export function DoorGrid() {
   };
 
   const handleDoorOpen = (doorId: string) => {
-    // Aqui você pode adicionar lógica adicional quando uma porta é aberta
     console.log(`Porta ${doorId} foi aberta`);
+    // toast.success(`Porta ${doorId} foi aberta`);
   };
 
   // Função para limpar filtros
@@ -151,8 +151,7 @@ export function DoorGrid() {
       </div>
     );
   }
-  console.log("Selected UFs:", selectedUFs);
-  console.log("Available UFs for select:", availableUFs);
+
   return (
     <div className="space-y-6">
       {/* Header com controles */}
@@ -215,13 +214,8 @@ export function DoorGrid() {
           {/* Filtro por UF - Multi-select */}
           <div className="space-y-2">
             <label className="text-sm font-medium text-gray-700">
-              Estados (UF) - Debug: {availableUFs.length} disponíveis
+              Estados (UF)
             </label>
-
-            {/* Debug: Mostrar as UFs disponíveis */}
-            <div className="text-xs text-gray-500 mb-2">
-              UFs encontradas: {availableUFs.join(", ") || "Nenhuma"}
-            </div>
 
             {/* Dropdown simples como alternativa */}
             <div className="relative" data-uf-dropdown>
