@@ -12,14 +12,14 @@ declare module "next-auth" {
       id: string;
       name?: string | null;
       email?: string | null;
-      role?: string;
+      role: string;
     };
   }
 }
 
 interface User extends NextAuthUser {
   token?: string;
-  role?: string;
+  role: string;
 }
 
 export const authOptions = {
@@ -59,20 +59,33 @@ export const authOptions = {
         );
         if (!isValid) return null;
 
-        return { id: user.id, email: user.email };
+        return { id: user.id, email: user.email, role: user.role };
       },
     }),
   ],
   session: {
     strategy: "jwt" as const,
+    // Tempo máximo de inatividade (30 minutos)
+    maxAge: 30 * 60, // 30 minutos em segundos
+    // Atualiza a sessão a cada 5 minutos
+    updateAge: 5 * 60, // 5 minutos em segundos
+  },
+  jwt: {
+    // Tempo de vida do JWT (30 minutos)
+    maxAge: 30 * 60, // 30 minutos em segundos
   },
   callbacks: {
     async jwt({ token, user }: { token: JWT; user?: User }) {
-      if (user?.token) token.accessToken = user.token;
+      if (user) {
+        token.acccessToken = user.token || "";
+        token.role = user.role || "user"; // Default to 'user' if no role is provided
+      }
+      // if (user?.token) token.accessToken = user.token;
       return token;
     },
     async session({ session, token }: { session: Session; token: JWT }) {
       session.accessToken = token.accessToken as string;
+      session.user.role = token.role as string; // Ensure role is set in session
       return session;
     },
   },

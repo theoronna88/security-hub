@@ -11,8 +11,9 @@ export default withAuth({
 
 export const config = {
   matcher: [
-    "/((?!$|api|fonts|_next|_mockup|_utils|components|_api).*)", // Protege tudo, exceto:
-    // "$" -> raiz ("/")
-    // "api", "fonts", "_next", "_mockup", "_utils", "components", "_api"
+    "/portas/:path*", // Protege especificamente a rota portas
+    "/users/:path*", // Protege especificamente a rota users
+    "/api/:path*", // Protege todas as rotas de API
+    // Adicione outras rotas específicas que precisam de proteção
   ],
 };

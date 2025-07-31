@@ -12,12 +12,12 @@ const NavBar = () => {
     return null; // Ou um skeleton/loading
   }
 
-  if (!session || session.user.role !== "ADMIN") {
+  if (!session || session.user.role !== "admin") {
     return null; // Não mostra navbar para usuários comuns
   }
 
   const handleLogout = () => {
-    signOut({ callbackUrl: "/login" });
+    signOut({ callbackUrl: "/" });
   };
 
   return (

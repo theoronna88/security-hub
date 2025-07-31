@@ -18,7 +18,6 @@ import {
   AlertCircle,
   Loader2,
   List,
-  PencilIcon,
 } from "lucide-react";
 import { toast } from "sonner";
 import { Dialog, DialogContent, DialogTitle, DialogTrigger } from "./ui/dialog";

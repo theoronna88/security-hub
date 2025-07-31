@@ -9,18 +9,12 @@ import {
   Plus,
   Search,
   Filter,
-  Check,
   ChevronDown,
   X,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
 import DialogAddDoor from "./dialog-add-door";
@@ -43,6 +37,13 @@ export function DoorGrid() {
       if (result.success) {
         setDoors(result.doors);
         console.log("Portas carregadas:", result.doors);
+        console.log(
+          "Locations nas portas:",
+          result.doors.map((door: Door) => ({
+            name: door.name,
+            location: door.location,
+          }))
+        );
       } else {
         toast.error("Erro ao carregar portas");
       }
@@ -76,7 +77,10 @@ export function DoorGrid() {
     const ufs = doors
       .map((door) => door.location)
       .filter((uf): uf is string => typeof uf === "string" && uf.length > 0);
-    return [...new Set(ufs)].sort();
+    console.log("Available UFs raw:", ufs);
+    const uniqueUFs = Array.from(new Set(ufs)).sort();
+    console.log("Available UFs unique:", uniqueUFs);
+    return uniqueUFs;
   }, [doors]);
 
   // Função para alternar seleção de UF
@@ -121,6 +125,22 @@ export function DoorGrid() {
     fetchDoors();
   }, []);
 
+  // Fechar dropdown quando clicar fora
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as Element;
+      if (!target.closest("[data-uf-dropdown]")) {
+        setIsUFPopoverOpen(false);
+      }
+    };
+
+    if (isUFPopoverOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+      return () =>
+        document.removeEventListener("mousedown", handleClickOutside);
+    }
+  }, [isUFPopoverOpen]);
+
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
@@ -131,7 +151,8 @@ export function DoorGrid() {
       </div>
     );
   }
-
+  console.log("Selected UFs:", selectedUFs);
+  console.log("Available UFs for select:", availableUFs);
   return (
     <div className="space-y-6">
       {/* Header com controles */}
@@ -194,23 +215,40 @@ export function DoorGrid() {
           {/* Filtro por UF - Multi-select */}
           <div className="space-y-2">
             <label className="text-sm font-medium text-gray-700">
-              Estados (UF)
+              Estados (UF) - Debug: {availableUFs.length} disponíveis
             </label>
-            <Popover open={isUFPopoverOpen} onOpenChange={setIsUFPopoverOpen}>
-              <PopoverTrigger asChild>
-                <Button
-                  variant="outline"
-                  role="combobox"
-                  aria-expanded={isUFPopoverOpen}
-                  className="w-full justify-between h-auto min-h-10"
-                >
-                  <div className="flex flex-wrap gap-1">
-                    {selectedUFs.length === 0 ? (
-                      <span className="text-gray-500">
-                        Selecione estados...
-                      </span>
-                    ) : selectedUFs.length <= 3 ? (
-                      selectedUFs.map((uf) => (
+
+            {/* Debug: Mostrar as UFs disponíveis */}
+            <div className="text-xs text-gray-500 mb-2">
+              UFs encontradas: {availableUFs.join(", ") || "Nenhuma"}
+            </div>
+
+            {/* Dropdown simples como alternativa */}
+            <div className="relative" data-uf-dropdown>
+              <Button
+                variant="outline"
+                onClick={() => setIsUFPopoverOpen(!isUFPopoverOpen)}
+                className="w-full justify-between h-auto min-h-10"
+              >
+                <div className="flex flex-wrap gap-1">
+                  {selectedUFs.length === 0 ? (
+                    <span className="text-gray-500">Selecione estados...</span>
+                  ) : selectedUFs.length <= 3 ? (
+                    selectedUFs.map((uf) => (
+                      <Badge key={uf} variant="secondary" className="text-xs">
+                        {uf}
+                        <X
+                          className="ml-1 h-3 w-3 cursor-pointer"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            removeUF(uf);
+                          }}
+                        />
+                      </Badge>
+                    ))
+                  ) : (
+                    <>
+                      {selectedUFs.slice(0, 2).map((uf) => (
                         <Badge key={uf} variant="secondary" className="text-xs">
                           {uf}
                           <X
@@ -221,78 +259,73 @@ export function DoorGrid() {
                             }}
                           />
                         </Badge>
-                      ))
+                      ))}
+                      <Badge variant="secondary" className="text-xs">
+                        +{selectedUFs.length - 2} mais
+                      </Badge>
+                    </>
+                  )}
+                </div>
+                <ChevronDown
+                  className={`h-4 w-4 shrink-0 transition-transform ${
+                    isUFPopoverOpen ? "rotate-180" : ""
+                  }`}
+                />
+              </Button>
+
+              {/* Dropdown manual */}
+              {isUFPopoverOpen && (
+                <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-200 rounded-md shadow-lg z-50 max-h-60 overflow-y-auto">
+                  <div className="p-3 border-b bg-gray-50">
+                    <div className="flex justify-between gap-2">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={selectAllUFs}
+                        disabled={selectedUFs.length === availableUFs.length}
+                      >
+                        Selecionar Todos ({availableUFs.length})
+                      </Button>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={clearAllUFs}
+                        disabled={selectedUFs.length === 0}
+                      >
+                        Limpar Todos
+                      </Button>
+                    </div>
+                  </div>
+                  <div className="bg-white">
+                    {availableUFs.length === 0 ? (
+                      <div className="p-4 text-center text-gray-500">
+                        Nenhuma UF disponível
+                      </div>
                     ) : (
-                      <>
-                        {selectedUFs.slice(0, 2).map((uf) => (
-                          <Badge
-                            key={uf}
-                            variant="secondary"
-                            className="text-xs"
+                      availableUFs.map((uf) => (
+                        <div
+                          key={uf}
+                          className="flex items-center space-x-2 p-3 hover:bg-gray-50 cursor-pointer border-b border-gray-100 last:border-b-0"
+                          onClick={() => toggleUF(uf)}
+                        >
+                          <Checkbox
+                            id={`uf-${uf}`}
+                            checked={selectedUFs.includes(uf)}
+                            onCheckedChange={() => toggleUF(uf)}
+                          />
+                          <label
+                            htmlFor={`uf-${uf}`}
+                            className="text-sm font-medium leading-none cursor-pointer flex-1"
                           >
                             {uf}
-                            <X
-                              className="ml-1 h-3 w-3 cursor-pointer"
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                removeUF(uf);
-                              }}
-                            />
-                          </Badge>
-                        ))}
-                        <Badge variant="secondary" className="text-xs">
-                          +{selectedUFs.length - 2} mais
-                        </Badge>
-                      </>
+                          </label>
+                        </div>
+                      ))
                     )}
                   </div>
-                  <ChevronDown className="h-4 w-4 shrink-0 opacity-50" />
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent className="w-full p-0" align="start">
-                <div className="p-3 border-b">
-                  <div className="flex justify-between gap-2">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={selectAllUFs}
-                      disabled={selectedUFs.length === availableUFs.length}
-                    >
-                      Selecionar Todos
-                    </Button>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={clearAllUFs}
-                      disabled={selectedUFs.length === 0}
-                    >
-                      Limpar Todos
-                    </Button>
-                  </div>
                 </div>
-                <div className="max-h-60 overflow-y-auto">
-                  {availableUFs.map((uf) => (
-                    <div
-                      key={uf}
-                      className="flex items-center space-x-2 p-2 hover:bg-gray-50 cursor-pointer"
-                      onClick={() => toggleUF(uf)}
-                    >
-                      <Checkbox
-                        id={`uf-${uf}`}
-                        checked={selectedUFs.includes(uf)}
-                        onChange={() => toggleUF(uf)}
-                      />
-                      <label
-                        htmlFor={`uf-${uf}`}
-                        className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer"
-                      >
-                        {uf}
-                      </label>
-                    </div>
-                  ))}
-                </div>
-              </PopoverContent>
-            </Popover>
+              )}
+            </div>
           </div>
 
           {/* Botão para limpar filtros */}
@@ -316,7 +349,7 @@ export function DoorGrid() {
           <div className="mt-4 flex flex-wrap gap-2">
             {nameFilter && (
               <div className="inline-flex items-center gap-1 px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">
-                <span>Nome: "{nameFilter}"</span>
+                <span>Nome: &quot;{nameFilter}&quot;</span>
                 <button
                   onClick={() => setNameFilter("")}
                   className="ml-1 hover:bg-blue-200 rounded-full p-0.5"

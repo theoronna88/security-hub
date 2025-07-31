@@ -16,7 +16,7 @@ const Login = () => {
         res.json()
       );
       if (session?.user) {
-        router.push("/portas");
+        // router.push("/portas");
       }
     };
     checkAuth();
