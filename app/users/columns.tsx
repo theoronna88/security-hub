@@ -1,14 +1,10 @@
 "use client";
 import { ColumnDef } from "@tanstack/react-table";
-import {
-  MoreHorizontal,
-  TrashIcon,
-  UserCogIcon,
-  UserPenIcon,
-} from "lucide-react";
+import { MoreHorizontal, TrashIcon, UserCogIcon } from "lucide-react";
 import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
+import DialogAddUser from "../components/dialog-add-user";
 
 export type User = {
   id: string;
@@ -106,9 +102,7 @@ function ActionsDropdown({ user }: { user: User }) {
           >
             <div className="px-2 py-1.5 text-sm font-medium">Ações</div>
 
-            <button className="w-full text-left px-2 py-1.5 text-sm hover:bg-gray-100 rounded-sm flex items-center gap-2">
-              <UserPenIcon size={16} color="black" /> Editar
-            </button>
+            <DialogAddUser title="Editar" user={user} />
 
             <div className="h-px bg-gray-200 my-1" />
 

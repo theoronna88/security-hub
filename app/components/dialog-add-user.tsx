@@ -1,4 +1,4 @@
-import { PlusIcon } from "lucide-react";
+import { PlusIcon, UserPenIcon } from "lucide-react";
 import { Button } from "./ui/button";
 import { Dialog, DialogContent, DialogTitle, DialogTrigger } from "./ui/dialog";
 import z from "zod";
@@ -40,7 +40,7 @@ const formSchema = z.object({
   name: z.string().min(1, "Nome é obrigatório"),
   email: z.string().email("Email inválido").min(1, "Email é obrigatório"),
   password: z.string().min(6, "Senha deve ter pelo menos 6 caracteres"),
-  role: z.enum(["admin", "user"], "Selecione um perfil"),
+  role: z.enum(["admin", "user"]),
   createdAt: z.string().optional(),
   isActive: z.boolean().optional(),
 });
@@ -89,8 +89,19 @@ const DialogAddUser = ({ title, user }: DialogAddUserProps) => {
     <>
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogTrigger asChild>
-          <Button variant="secondary" className="bg-blue-400 text-white">
-            <PlusIcon />
+          <Button
+            variant={title === "Editar" ? "ghost" : "secondary"}
+            className={
+              title === "Editar"
+                ? "text-black font-normal"
+                : "bg-blue-400 text-white"
+            }
+          >
+            {title === "Editar" ? (
+              <UserPenIcon size={16} color="black" />
+            ) : (
+              <PlusIcon />
+            )}
             {title} Usuário
           </Button>
         </DialogTrigger>
