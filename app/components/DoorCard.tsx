@@ -24,6 +24,7 @@ import { Dialog, DialogContent, DialogTitle, DialogTrigger } from "./ui/dialog";
 import { ScrollArea } from "@/components/ui/scroll-area"; // Importe ScrollArea
 import DialogAddDoor from "./dialog-add-door";
 
+/*
 // Adicione a interface para os eventos de acesso
 interface AccessRecord {
   AttendanceState: number;
@@ -48,7 +49,7 @@ interface AccessRecord {
   URL?: string;
   UserID: string;
   UserType: number;
-}
+}*/
 
 interface DoorCardProps {
   door: Door;
@@ -59,9 +60,9 @@ export function DoorCard({ door, onDoorOpen }: DoorCardProps) {
   const [isOpening, setIsOpening] = useState(false);
   const [cameraImageUrl, setCameraImageUrl] = useState<string | null>(null);
   const [isLoadingCamera, setIsLoadingCamera] = useState<boolean>(false);
-  const [events, setEvents] = useState<AccessRecord[]>([]); // Novo estado para eventos
-  const [isLoadingEvents, setIsLoadingEvents] = useState<boolean>(false); // Novo estado para carregamento de eventos
-  const [eventsError, setEventsError] = useState<string | null>(null); // Novo estado para erro de eventos
+  //const [events, setEvents] = useState<AccessRecord[]>([]); // Novo estado para eventos
+  //const [isLoadingEvents, setIsLoadingEvents] = useState<boolean>(false); // Novo estado para carregamento de eventos
+  //const [eventsError, setEventsError] = useState<string | null>(null); // Novo estado para erro de eventos
 
   // Efeito para revogar a URL do objeto Blob quando o componente desmontar
   // ou quando a URL da imagem mudar, para liberar memória.
@@ -228,10 +229,10 @@ export function DoorCard({ door, onDoorOpen }: DoorCardProps) {
   }; */
 
   // Função auxiliar para formatar o timestamp Unix
-  const formatUnixTimestamp = (timestamp: number): string => {
+  /*const formatUnixTimestamp = (timestamp: number): string => {
     const date = new Date(timestamp * 1000); // Converter segundos para milissegundos
     return date.toLocaleString(); // Retorna a data e hora formatadas localmente
-  };
+  }; */
 
   return (
     <Card
@@ -287,7 +288,7 @@ export function DoorCard({ door, onDoorOpen }: DoorCardProps) {
         )*/}
 
         <div className="space-y-2 text-xs text-gray-500">
-          <div>IP: {door.deviceIp}</div>
+          {/*<div>IP: {door.deviceIp}</div> */}
           <div>Canal: {door.channel}</div>
         </div>
 
@@ -347,10 +348,10 @@ export function DoorCard({ door, onDoorOpen }: DoorCardProps) {
             </>
           )}
         </Button>
-
+        {/*
         <Dialog>
           <DialogTrigger asChild>
-            {/*
+          
             <Button
               disabled={isLoadingEvents || door.status === "offline"} // Desabilita enquanto carrega eventos
               className="w-full"
@@ -369,11 +370,11 @@ export function DoorCard({ door, onDoorOpen }: DoorCardProps) {
                 </>
               )}
             </Button>
-            {/* */}
+            {/* 
           </DialogTrigger>
           <DialogContent className="max-h-[80vh] overflow-y-auto">
             {" "}
-            {/* Adicione max-h e overflow */}
+            {/* Adicione max-h e overflow 
             <DialogTitle>
               Relatório de Eventos da Porta: {door.name}
             </DialogTitle>
@@ -398,7 +399,7 @@ export function DoorCard({ door, onDoorOpen }: DoorCardProps) {
               {!isLoadingEvents && !eventsError && events.length > 0 && (
                 <ScrollArea className="h-96 w-full rounded-md border p-4">
                   {" "}
-                  {/* Ajuste a altura conforme necessário */}
+                  {/* Ajuste a altura conforme necessário 
                   <div className="space-y-4">
                     {events
                       .sort((a, b) => b.CreateTime - a.CreateTime) // Opcional: ordenar por data mais recente
@@ -451,7 +452,6 @@ export function DoorCard({ door, onDoorOpen }: DoorCardProps) {
                               </a>
                             </p>
                           )}
-                          {/* Adicione mais campos conforme necessário, verificando se existem */}
                         </Card>
                       ))}
                   </div>
@@ -460,6 +460,7 @@ export function DoorCard({ door, onDoorOpen }: DoorCardProps) {
             </div>
           </DialogContent>
         </Dialog>
+       { */}
       </CardContent>
     </Card>
   );
