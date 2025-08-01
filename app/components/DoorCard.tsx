@@ -21,7 +21,7 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import { Dialog, DialogContent, DialogTitle, DialogTrigger } from "./ui/dialog";
-import { ScrollArea } from "@/components/ui/scroll-area"; // Importe ScrollArea
+// import { ScrollArea } from "@/components/ui/scroll-area"; // Importe ScrollArea
 import DialogAddDoor from "./dialog-add-door";
 
 /*
