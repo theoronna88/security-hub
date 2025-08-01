@@ -1,6 +1,7 @@
 "use client";
 import { DoorGrid } from "@/components/DoorGrid";
 import { Toaster } from "@/components/ui/sonner";
+import Image from "next/image";
 
 const Portas = () => {
   return (
@@ -9,7 +10,13 @@ const Portas = () => {
         {/* Header */}
         <div className="text-center mb-8">
           <h1 className="text-4xl font-bold text-gray-900 mb-2">
-            Security Hub
+            <Image
+              src="/securityhub-logo.png"
+              alt="Security Hub"
+              width={250}
+              height={50}
+              className="mx-auto"
+            />
           </h1>
           <p className="text-lg text-gray-600">
             Gerencie e controle suas portas de acesso de forma inteligente

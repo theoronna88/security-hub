@@ -184,7 +184,7 @@ export function DoorGrid() {
       </div>
 
       {/* Seção de Filtros */}
-      <div className="bg-white p-4 rounded-lg border border-gray-200 shadow-sm">
+      <div className="bg-white p-4 rounded-2xl border border-gray-200 shadow-sm">
         <div className="flex items-center gap-2 mb-4">
           <Filter className="h-4 w-4 text-gray-500" />
           <h3 className="text-sm font-medium text-gray-700">Filtros</h3>

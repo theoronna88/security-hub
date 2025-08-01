@@ -3,6 +3,7 @@
 import { useSession, signOut } from "next-auth/react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import Image from "next/image";
 
 const NavBar = () => {
   const { data: session, status } = useSession();
@@ -25,7 +26,13 @@ const NavBar = () => {
       <div className="mx-auto flex justify-between items-center py-4 px-6">
         <div className="flex items-center space-x-4">
           <div className="text-lg font-bold text-slate-800">
-            Sistema de Portas
+            <Image
+              src="/securityhub-logo.png"
+              alt="Security Hub"
+              width={100}
+              height={50}
+              className="mx-auto"
+            />
           </div>
           <Badge variant="secondary" className="bg-blue-100 text-blue-800">
             Administrador
