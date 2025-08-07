@@ -12,14 +12,14 @@ declare module "next-auth" {
       id: string;
       name?: string | null;
       email?: string | null;
-      role: string;
+      role?: string;
     };
   }
 }
 
 interface User extends NextAuthUser {
   token?: string;
-  role: string;
+  role?: string;
 }
 
 export const authOptions = {
