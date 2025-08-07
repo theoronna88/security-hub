@@ -54,9 +54,10 @@ interface AccessRecord {
 interface DoorCardProps {
   door: Door;
   onDoorOpen?: (doorId: string) => void;
+  isAdmin: boolean;
 }
 
-export function DoorCard({ door, onDoorOpen }: DoorCardProps) {
+export function DoorCard({ door, onDoorOpen, isAdmin }: DoorCardProps) {
   const [isOpening, setIsOpening] = useState(false);
   const [cameraImageUrl, setCameraImageUrl] = useState<string | null>(null);
   const [isLoadingCamera, setIsLoadingCamera] = useState<boolean>(false);
@@ -241,7 +242,9 @@ export function DoorCard({ door, onDoorOpen }: DoorCardProps) {
       <CardHeader className="pb-3">
         <div className="flex items-center justify-between">
           {/* Botão de edição da porta */}
-          <DialogAddDoor buttonTitle="Editar Porta" door={door} />
+          {isAdmin ? (
+            <DialogAddDoor buttonTitle="Editar Porta" door={door} />
+          ) : null}
 
           <CardTitle className="text-lg font-semibold">{door.name}</CardTitle>
           <div className="flex items-center gap-2">

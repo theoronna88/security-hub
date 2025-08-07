@@ -18,6 +18,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
 import DialogAddDoor from "./dialog-add-door";
+import { useSession } from "next-auth/react";
 
 export function DoorGrid() {
   const [doors, setDoors] = useState<Door[]>([]);
@@ -28,6 +29,18 @@ export function DoorGrid() {
   const [nameFilter, setNameFilter] = useState("");
   const [selectedUFs, setSelectedUFs] = useState<string[]>([]);
   const [isUFPopoverOpen, setIsUFPopoverOpen] = useState(false);
+
+  // Estado para verificar se o usuário é admin
+  const { data: session } = useSession();
+  const [isAdmin, setIsAdmin] = useState(false);
+
+  useEffect(() => {
+    if (!session) {
+      setIsAdmin(false);
+    } else {
+      setIsAdmin(session.user.role === "admin");
+    }
+  }, [session]);
 
   const fetchDoors = async () => {
     try {
@@ -179,7 +192,7 @@ export function DoorGrid() {
             Atualizar
           </Button>
 
-          <DialogAddDoor buttonTitle="Adicionar Porta" />
+          {isAdmin ? <DialogAddDoor buttonTitle="Adicionar Porta" /> : null}
         </div>
       </div>
 
@@ -406,7 +419,12 @@ export function DoorGrid() {
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {filteredDoors.map((door) => (
-            <DoorCard key={door.nid} door={door} onDoorOpen={handleDoorOpen} />
+            <DoorCard
+              key={door.nid}
+              door={door}
+              onDoorOpen={handleDoorOpen}
+              isAdmin={isAdmin}
+            />
           ))}
         </div>
       )}
