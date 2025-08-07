@@ -49,7 +49,7 @@ export const authOptions = {
 
         // First, try plain text comparison
         if (credentials.password === user.password) {
-          return { id: user.id, email: user.email };
+          return { id: user.id, email: user.email, role: user.role };
         }
 
         // If plain text fails, try bcrypt comparison
@@ -57,6 +57,8 @@ export const authOptions = {
           credentials.password,
           user.password
         );
+
+        console.log("Password valid:", isValid);
         if (!isValid) return null;
 
         return { id: user.id, email: user.email, role: user.role };
@@ -77,6 +79,7 @@ export const authOptions = {
   callbacks: {
     async jwt({ token, user }: { token: JWT; user?: User }) {
       if (user) {
+        console.log("User in JWT callback:", user);
         token.acccessToken = user.token || "";
         token.role = user.role || "user"; // Default to 'user' if no role is provided
       }
