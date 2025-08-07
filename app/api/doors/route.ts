@@ -35,7 +35,7 @@ export async function GET() {
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    let door = "";
+    let door = {};
 
     if (body.nid) {
       // If nid is provided, update the existing door
